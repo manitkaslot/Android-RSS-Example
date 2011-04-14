@@ -1,6 +1,7 @@
 package com.example;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
@@ -37,10 +38,13 @@ class NewsParser extends DefaultHandler {
         try {
             URL url = new URL(this.urlString);
             urlInputStream = url.openConnection().getInputStream();
+            InputSource is = new InputSource(urlInputStream);
+            is.setEncoding("ISO-8859-1");
+
             spf = SAXParserFactory.newInstance();
             if (spf != null) {
                 sp = spf.newSAXParser();
-                sp.parse(urlInputStream, this);
+                sp.parse(is, this);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -150,7 +154,7 @@ class NewsParser extends DefaultHandler {
         }
     }
 
-  public static class Item implements Comparable<Item> {
+    public static class Item implements Comparable<Item> {
         public String title;
         public String description;
         public String link;
